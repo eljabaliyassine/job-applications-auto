@@ -373,5 +373,21 @@ const seedDatabase = async () => {
   }
 };
 
+if (require.main === module) {
+  require('dotenv').config();
+  const connectDB = require('./config/db');
+  (async () => {
+    try {
+      await connectDB();
+      await seedDatabase();
+      console.log('✨ [Seed] Données initialisées avec succès dans la base de données !');
+      process.exit(0);
+    } catch (err) {
+      console.error('❌ [Seed] Erreur :', err);
+      process.exit(1);
+    }
+  })();
+}
+
 module.exports = seedDatabase;
 
