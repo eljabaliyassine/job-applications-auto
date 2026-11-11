@@ -1,75 +1,82 @@
-# ⚡ TechStore - Plateforme E-Commerce Fullstack
+# ⚡ TechStore - Plateforme E-Commerce Fullstack Moderne (v2.0)
 
-Plateforme marchande High-Tech complète développée avec **React 18** (Vite), **Node.js / Express**, **JWT** et **Context API**.
-
-Ce projet est la réalisation concrète du sujet d'évaluation académique `Projet_Ecommerce_Fullstack_Enonce_et_Corrige.pdf`.
+Plateforme marchande High-Tech complète et professionnelle développée avec **React 18** (Vite), **Tailwind CSS v4**, **Node.js / Express**, **MongoDB / Mongoose** (Support Local et **MongoDB Atlas Cloud**), et **JWT**.
 
 ---
 
-## 🌟 Fonctionnalités Implémentées
+## 🌟 Architecture & Nouveautés
 
-- 📦 **Catalogue & Produits :**
-  - Affichage en grille responsive de produits High-Tech avec visuels, avis étoiles, catégories et stock en temps réel.
-  - Filtres instantanés par catégories (Smartphones, Ordinateurs, Audio, Écrans, Accessoires, Tablettes).
-  - Barre de recherche textuelle dynamique en direct.
-  - Tri par prix croissant / décroissant ou par avis clients.
-- 🛒 **Panier d'Achat Interactif & Persistant :**
-  - Tiroir coulissant (*Sliding Cart Drawer*) avec animation fluide.
-  - Incrémentation / décrémentation des quantités avec contrôle automatique des stocks maximums.
-  - Sauvegarde et synchronisation continue dans le `localStorage` (le panier ne disparaît jamais lors d'un rechargement de page).
-  - Barre de progression dynamique pour débloquer la **livraison gratuite** (dès 500 € d'achat).
-  - Calcul automatique en temps réel de la TVA (20%), des frais de port et du montant total TTC.
-- 🔐 **Authentification Sécurisée (JWT & Bcrypt) :**
-  - Formulaires d'inscription et de connexion avec boutons de test en 1-clic (*Comptes Démo*).
-  - Hashage cryptographique des mots de passe avec `bcryptjs`.
-  - Signature de jetons de session `jsonwebtoken` (JWT) stockés côté client et transmis via header `Authorization: Bearer <token>`.
-- 💳 **Tunnel de Commande (Checkout) :**
-  - Formulaire de saisie d'adresse de livraison complète.
-  - Validation sécurisée côté serveur : vérification des prix, contrôle des stocks restants et déduction en direct.
-  - Écran de succès avec génération d'un numéro de commande unique (ex: `CMD-XXXXXX`).
-- 📜 **Historique des Commandes :**
-  - Fenêtre dédiée permettant au client connecté de consulter l'ensemble de ses commandes passées, la date, le statut d'expédition et le récapitulatif des articles achetés.
+- 📄 **Architecture Multi-Pages (0 Modals)** :
+  - `/` : Accueil avec catalogue, recherche dynamique et filtres.
+  - `/product/:id` : Page détaillée de produit avec galerie, spécifications, stock et avis clients.
+  - `/cart` : Panier complet avec jauge de livraison gratuite et gestion des codes promo.
+  - `/checkout` : Tunnel de commande complet en 2 colonnes avec récapitulatif et sélection de paiement.
+  - `/orders` : Suivi détaillé des commandes passées avec statuts dynamiques.
+  - `/wishlist` : Liste des favoris avec transfert direct vers le panier.
+  - `/admin` : Suite de gestion administrative (KPIs, CRUD Produits, Commandes, Coupons, Gestion des rôles).
+  - `/login` & `/register` : Pages d'authentification avec comptes démo en 1-clic.
+
+- 🎨 **Design Moderne & Icônes SVG Lucide** :
+  - **Zéro Emoji** : Interface épurée inspirée de **Shadcn UI** et **Tailwind CSS v4**.
+  - Icônes vectorielles SVG intégrées via `lucide-react`.
+
+- 🗄️ **Base de Données MongoDB (Local & Cloud Atlas)** :
+  - Modèles Mongoose : `User`, `Product`, `Order`, `Coupon`, `Wishlist`, `Review`.
+  - Connexion automatique avec fallback intelligent : supporte MongoDB local (`127.0.0.1:27017`) et **MongoDB Atlas Cloud** (`mongodb+srv://...`).
+  - Guide complet d'intégration MongoDB Atlas en arabe : [GUIDE_MONGODB_ATLAS_AR.md](./GUIDE_MONGODB_ATLAS_AR.md).
 
 ---
 
-## 👥 Comptes de Démo Pré-enregistrés (Test Rapide)
+## 👥 Comptes de Démo Pré-enregistrés
 
-| Profil | Email | Mot de passe |
-| :--- | :--- | :--- |
-| **Client Démo** | `client@test.com` | `test1234` |
-| **Admin Démo** | `admin@techstore.com` | `admin123` |
-
-*(Vous pouvez également créer un nouveau compte client à tout moment via le formulaire d'inscription)*.
+| Profil | Email | Mot de passe | Rôle |
+| :--- | :--- | :--- | :--- |
+| **Administrateur** | `admin@techstore.com` | `admin123` | `admin` (Accès complet au panel `/admin`) |
+| **Client Démo** | `client@test.com` | `test1234` | `customer` |
 
 ---
 
 ## 🚀 Installation & Démarrage Rapide
 
 ### 1. Installation des dépendances
-Depuis le dossier `techstore-app/` :
 ```bash
 npm run install:all
 ```
 
-### 2. Lancement du Projet en 1 seule commande
+### 2. Configuration de la base de données
+Par défaut, l'application se connecte à un MongoDB local. Pour connecter **MongoDB Atlas** dans le cloud :
+1. Créez un fichier `.env` dans `backend/` en copiant `.env.example` :
+   ```bash
+   cp backend/.env.example backend/.env
+   ```
+2. Renseignez votre chaîne de connexion `MONGO_URI` (voir le guide [GUIDE_MONGODB_ATLAS_AR.md](./GUIDE_MONGODB_ATLAS_AR.md)).
+3. Initialisez la base de données avec les données de test :
+   ```bash
+   node backend/seed.js
+   ```
+
+### 3. Lancement de l'application
 ```bash
-npm start
+npm run dev
 ```
-*(ou `npm run dev`)*
 
 - **Frontend React (Vite) :** [http://localhost:3001](http://localhost:3001)
 - **Backend API (Express) :** [http://localhost:5001](http://localhost:5001)
 
 ---
 
-## 📡 Documentation des Endpoints REST
+## 📡 Endpoints REST Principaux
 
-| Méthode | Route | Rôle | Authentification |
+| Méthode | Route | Description | Accès |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/api/products` | Récupère la liste des produits filtrés/triés | Non requise |
-| `GET` | `/api/products/categories` | Récupère la liste des catégories | Non requise |
-| `POST` | `/api/auth/register` | Inscription client | Non requise |
-| `POST` | `/api/auth/login` | Connexion et délivrance de token JWT | Non requise |
-| `POST` | `/api/orders` | Validation et paiement de la commande | Requise (Bearer JWT) |
-| `GET` | `/api/orders/my-orders` | Historique des commandes du client connecté | Requise (Bearer JWT) |
-
+| `GET` | `/api/products` | Liste filtrée/triée des produits | Public |
+| `GET` | `/api/products/:id` | Détail d'un produit et ses avis | Public |
+| `POST` | `/api/auth/register` | Inscription nouvel utilisateur | Public |
+| `POST` | `/api/auth/login` | Connexion et délivrance du JWT | Public |
+| `POST` | `/api/orders` | Création et paiement d'une commande | Connecté (JWT) |
+| `GET` | `/api/orders/my-orders` | Historique personnel des commandes | Connecté (JWT) |
+| `GET` | `/api/admin/overview` | Statistiques et KPIs de la plateforme | Admin |
+| `POST` | `/api/admin/products` | Création d'un nouveau produit | Admin |
+| `PUT` | `/api/admin/products/:id` | Modification / réapprovisionnement | Admin |
+| `DELETE` | `/api/admin/products/:id` | Suppression d'un produit | Admin |
+| `GET` | `/api/coupons` | Gestion des codes promotionnels | Public / Admin |
